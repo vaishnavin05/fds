@@ -1,0 +1,52 @@
+def counting_sort_for_radix(arr, exp):
+    n = len(arr)
+    output = [0] * n
+    count = [0] * 10
+
+    # Count occurrences of each digit at the current place value
+    for i in arr:
+        index = int(i / exp) % 10
+        count[index] += 1
+
+    # Update count[i] to contain the position of the digit in output
+    for i in range(1, 10):
+        count[i] += count[i - 1]
+
+    # Build the output array
+    i = n - 1
+    while i >= 0:
+        index = int(arr[i] / exp) % 10
+        output[count[index] - 1] = arr[i]
+        count[index] -= 1
+        i -= 1
+
+    # Copy the sorted elements back into the original array
+    for i in range(n):
+        arr[i] = output[i]
+
+def radix_sort(arr):
+    # Find the maximum number to know the number of digits
+    max_num = max(arr)
+    exp = 1
+
+    # Perform counting sort for each digit (units, tens, hundreds, etc.)
+    while max_num / exp > 1:
+        counting_sort_for_radix(arr, exp)
+        exp *= 10
+
+
+percentages = []
+total = int(input("Enter the total number of students: "))
+for i in range(total):
+    percentages.append(float(input(f"Enter percentage of student {i + 1}: ")))
+ 
+print("Original Percentages:", percentages)
+
+# Sort the array using radix sort
+radix_sort(percentages)
+print("Sorted Percentages:", percentages)
+
+# Display the top five scores
+top_five = percentages[-5:][::-1]
+print("Top Five Scores:", top_five)
+
