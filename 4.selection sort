@@ -1,0 +1,58 @@
+def selection_sort(arr):
+    """
+    Sorts an array of floating point numbers in ascending order using Selection Sort.
+    """
+    n = len(arr)
+    for i in range(n):
+        # Find the minimum element in remaining unsorted array
+        min_idx = i
+        for j in range(i+1, n):
+            if arr[j] < arr[min_idx]:
+                min_idx = j
+        # Swap the found minimum element with the first element
+        arr[i], arr[min_idx] = arr[min_idx], arr[i]
+    return arr
+
+def bubble_sort(arr):
+    """
+    Sorts an array of floating point numbers in ascending order using Bubble Sort.
+    """
+    n = len(arr)
+    for i in range(n):
+        for j in range(0, n-i-1):
+            if arr[j] > arr[j+1]:
+                # Swap if the element found is greater than the next element
+                arr[j], arr[j+1] = arr[j+1], arr[j]
+    return arr
+
+def display_top_five_scores(arr):
+    """
+    Displays the top five scores from the sorted array.
+    """
+    # Ensure the array has at least five elements
+    top_five = arr[-5:] if len(arr) >= 5 else arr
+    print("Top five scores:")
+    for score in top_five:
+        print(f"{score:.2f}")
+
+def main():
+    # Example input array of percentages (floating point numbers)
+    percentages = [78.5, 92.0, 88.5, 95.0, 67.0, 85.5, 79.0, 91.5, 82.0, 90.0]
+    
+    print("Original percentages:")
+    print(percentages)
+    
+    # Sorting and displaying top five scores using Selection Sort
+    sorted_percentages_selection = selection_sort(percentages.copy())
+    print("\nSorted percentages (Selection Sort):")
+    print(sorted_percentages_selection)
+    display_top_five_scores(sorted_percentages_selection)
+    
+    # Sorting and displaying top five scores using Bubble Sort
+    sorted_percentages_bubble = bubble_sort(percentages.copy())
+    print("\nSorted percentages (Bubble Sort):")
+    print(sorted_percentages_bubble)
+    display_top_five_scores(sorted_percentages_bubble)
+
+if __name__ == "__main__":
+    main()
