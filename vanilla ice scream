@@ -1,0 +1,143 @@
+#include <iostream>
+#include <unordered_set>
+using namespace std;
+
+// Node structure for the linked list
+class Node {
+public:
+    int data;
+    Node *next;
+
+    // Constructor to initialize a node
+    Node(int val) {
+        data = val;
+        next = nullptr;
+    }
+};
+
+// Class to represent a set using linked list
+class LinkedList {
+public:
+    Node *head;
+
+    LinkedList() { head = nullptr; }
+
+    // Insert a value into the linked list
+    void insert(int val) {
+        Node *newNode = new Node(val);
+        if (head == nullptr) {
+            head = newNode;
+        } else {
+            Node *temp = head;
+            while (temp->next != nullptr) {
+                temp = temp->next;
+            }
+            temp->next = newNode;
+        }
+    }
+
+    // Display the linked list
+    void display() {
+        Node *temp = head;
+        while (temp != nullptr) {
+            cout << temp->data << " ";
+            temp = temp->next;
+        }
+        cout << endl;
+    }
+
+    // Convert the linked list to an unordered_set for easy set operations
+    unordered_set<int> toSet() {
+        unordered_set<int> s;
+        Node *temp = head;
+        while (temp != nullptr) {
+            s.insert(temp->data);
+            temp = temp->next;
+        }
+        return s;
+    }
+};
+
+int main() {
+    LinkedList vanillaSet, butterscotchSet;
+
+    int n, m, universalCount;
+    cout << "Enter the total number of students (Universal set size): ";
+    cin >> universalCount;
+
+    // Input Vanilla Ice-cream lovers
+    cout << "Enter the number of students who like Vanilla Ice-cream: ";
+    cin >> n;
+    cout << "Enter their roll numbers: ";
+    for (int i = 0; i < n; i++) {
+        int roll;
+        cin >> roll;
+        vanillaSet.insert(roll);
+    }
+
+    // Input Butterscotch Ice-cream lovers
+    cout << "Enter the number of students who like Butterscotch Ice-cream: ";
+    cin >> m;
+    cout << "Enter their roll numbers: ";
+    for (int i = 0; i < m; i++) {
+        int roll;
+        cin >> roll;
+        butterscotchSet.insert(roll);
+    }
+
+    // Convert the linked lists to sets for operations
+    unordered_set<int> vanilla = vanillaSet.toSet();
+    unordered_set<int> butterscotch = butterscotchSet.toSet();
+
+    // a) Students who like both Vanilla and Butterscotch (Intersection)
+    unordered_set<int> both;
+    for (int roll : vanilla) {
+        if (butterscotch.find(roll) != butterscotch.end()) {
+            both.insert(roll);
+        }
+    }
+    cout << "Students who like both Vanilla and Butterscotch: ";
+    for (int roll : both) {
+        cout << roll << " ";
+    }
+    cout << endl;
+
+    // b) Students who like either Vanilla or Butterscotch but not both (Symmetric Difference)
+    unordered_set<int> eitherOr;
+    for (int roll : vanilla) {
+        if (butterscotch.find(roll) == butterscotch.end()) {
+            eitherOr.insert(roll);
+        }
+    }
+    for (int roll : butterscotch) {
+        if (vanilla.find(roll) == vanilla.end()) {
+            eitherOr.insert(roll);
+        }
+    }
+    cout << "Students who like either Vanilla or Butterscotch but not both: ";
+    for (int roll : eitherOr) {
+        cout << roll << " ";
+    }
+    cout << endl;
+
+    // c) Students who like neither Vanilla nor Butterscotch
+    unordered_set<int> allStudents;
+    for (int i = 1; i <= universalCount; i++) {
+        allStudents.insert(i);
+    }
+
+    for (int roll : vanilla) {
+        allStudents.erase(roll);
+    }
+    for (int roll : butterscotch) {
+        allStudents.erase(roll);
+    }
+
+    cout << "Students who like neither Vanilla nor Butterscotch: ";
+    for (int roll : allStudents) {
+        cout << roll << " ";
+    }
+    cout << endl;
+
+    return 0;
+}
